@@ -72,3 +72,5 @@ frontend/android/.gradle/
 frontend/android/local.properties
 frontend/ios/Flutter/ephemeral/
 frontend/ios/Flutter/.last_build_id
+
+.env
