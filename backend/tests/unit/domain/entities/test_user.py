@@ -5,15 +5,12 @@ from app.domain.entities.user import User
 
 
 def test_should_create_user():
-    user_id = uuid4()
-
     user = User(
-        id=user_id,
         name="Maria Silva",
         email="maria@example.com",
     )
 
-    assert user.id == user_id
+    assert isinstance(user.id, UUID)
     assert user.name == "Maria Silva"
     assert user.email == "maria@example.com"
     assert user.preferred_name is None
@@ -103,24 +100,15 @@ def test_should_normalize_email_to_lowercase():
     assert user.email == "maria@example.com"
 
 
-def test_should_generate_random_uuid():
-    user = User(
-        name="Maria Silva",
+def test_should_generate_different_ids_for_different_users():
+    user_a = User(
+        name="Maria",
         email="maria@example.com",
     )
 
-    assert isinstance(user.id, UUID)
-
-
-def test_should_generate_different_ids():
-    user1 = User(
-        name="Maria Silva",
-        email="maria1@example.com",
+    user_b = User(
+        name="Amanda",
+        email="amanda@example.com",
     )
 
-    user2 = User(
-        name="Maria Silva",
-        email="maria2@example.com",
-    )
-
-    assert user1.id != user2.id
+    assert user_a.id != user_b.id
