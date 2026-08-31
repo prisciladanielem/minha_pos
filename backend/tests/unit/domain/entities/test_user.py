@@ -81,3 +81,13 @@ def test_should_accept_valid_email(email):
     )
 
     assert user.email == email
+
+@pytest.mark.parametrize("preferred_name", ["", "   "])
+def test_should_reject_empty_preferred_name(preferred_name):
+    with pytest.raises(ValueError, match="Preferred name cannot be empty"):
+        User(
+            id="user-1",
+            name="Maria",
+            email="maria@example.com",
+            preferred_name=preferred_name,
+        )
