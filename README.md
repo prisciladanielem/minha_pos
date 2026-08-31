@@ -705,3 +705,17 @@ The README is intended to provide a high-level overview of:
 - How it is structured
 - Which technologies are used
 - How the application is expected to evolve
+
+## Running tests
+
+Before running the test suite, make sure the database schema is up to date:
+
+```bash
+alembic upgrade head
+```
+
+Then run the tests:
+
+```bash
+pytest
+```
