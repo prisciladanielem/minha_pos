@@ -32,10 +32,52 @@ def test_should_reject_empty_name():
         )
 
 
-def test_should_reject_wrong_email():
+def test_should_reject_empty_id():
     with pytest.raises(ValueError):
         User(
-            id="user-1",
-            name="Amanda",
-            email="mariaexample.com",
+            id="",
+            name="Maria",
+            email="maria@example.com",
         )
+
+
+@pytest.mark.parametrize(
+    "email",
+    [
+        "",
+        "@",
+        "a@",
+        "@example.com",
+        "mariaexample.com",
+        "maria@",
+        "maria@example",
+        "maria @example.com",
+        "maria@example .com",
+        "maria@@example.com",
+    ],
+)
+def test_should_reject_invalid_email(email):
+    with pytest.raises(ValueError, match="Invalid email"):
+        User(
+            id="user-1",
+            name="Maria",
+            email=email,
+        )
+
+@pytest.mark.parametrize(
+    "email",
+    [
+        "maria@example.com",
+        "maria.silva@example.com",
+        "maria+test@example.com",
+        "maria@sub.example.com",
+    ],
+)
+def test_should_accept_valid_email(email):
+    user = User(
+        id="user-1",
+        name="Maria",
+        email=email,
+    )
+
+    assert user.email == email
