@@ -42,5 +42,9 @@ def create_user(
             },
         )
 
-    return user
-
+    return {
+        "id": str(user.id),
+        "name": user.name,
+        "preferred_name": user.preferred_name,
+        "email": user.email,
+    }
