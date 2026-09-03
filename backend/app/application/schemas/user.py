@@ -1,6 +1,7 @@
 from pydantic import BaseModel, field_validator, model_validator
 from pydantic_core import PydanticCustomError
 
+from uuid import UUID
 
 class CreateUserRequest(BaseModel):
     name: str
@@ -53,4 +54,10 @@ class CreateUserRequest(BaseModel):
             )
 
         return self
+
+class CreateUserResponse(BaseModel):
+    id: UUID
+    name: str
+    preferred_name: str | None
+    email: str
     

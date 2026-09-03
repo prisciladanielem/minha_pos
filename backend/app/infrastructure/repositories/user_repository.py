@@ -1,7 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from app.domain.entities.user import User
+from app.domain.exceptions.registration import EmailAlreadyRegisteredError
 from app.infrastructure.models.user import UserModel
 
 class UserRepository:
@@ -14,11 +16,17 @@ class UserRepository:
             name=user.name,
             email=user.email,
             preferred_name=user.preferred_name,
-            password_hash=password_hash
+            password_hash=password_hash,
         )
 
         self.session.add(user_model)
-        self.session.commit()
+
+        try:
+            self.session.commit()
+        except IntegrityError:
+            self.session.rollback()
+            raise EmailAlreadyRegisteredError()
+
         self.session.refresh(user_model)
 
         return User(

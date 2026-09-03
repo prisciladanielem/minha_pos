@@ -40,6 +40,12 @@ def test_should_reject_empty_name(client):
 
     assert response.status_code == 400
 
+    data = response.json()
+
+    assert data["error"] == "validation_error"
+    assert data["message"] == "Invalid request"
+    assert data["details"]["name"] == "Name cannot be empty"
+
 
 @pytest.mark.parametrize(
     "email",
@@ -82,8 +88,6 @@ def test_should_reject_different_password_confirmation(client):
             "password_confirmation": "Senha@456",
         },
     )
-
-    print(response.json())
 
     assert response.status_code == 400
 
@@ -258,4 +262,3 @@ def test_should_not_return_password_or_password_hash(client):
     assert response.status_code == 201
     assert "password" not in response.json()
     assert "password_hash" not in response.json()
-    

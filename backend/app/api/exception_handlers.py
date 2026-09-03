@@ -1,6 +1,10 @@
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+from app.domain.exceptions.validations import DomainValidationError
 
 
 async def validation_exception_handler(
@@ -23,5 +27,20 @@ async def validation_exception_handler(
             "error": "validation_error",
             "message": "Invalid request",
             "details": details,
+        },
+    )
+
+async def domain_validation_exception_handler(
+    request: Request,
+    exc: DomainValidationError,
+):
+    return JSONResponse(
+        status_code=400,
+        content={
+            "error": "validation_error",
+            "message": "Invalid request",
+            "details": {
+                exc.field: exc.message,
+            },
         },
     )
