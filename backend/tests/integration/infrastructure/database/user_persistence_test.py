@@ -1,4 +1,5 @@
 import pytest
+
 from uuid import uuid4
 
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +15,7 @@ def test_should_persist_user(db_session):
         name="Maria Silva",
         email="maria@example.com",
         preferred_name="Maria",
+        password_hash="hashed_password_123",
     )
 
     db_session.add(user)
@@ -35,6 +37,7 @@ def test_should_persist_user_without_preferred_name(db_session):
         id=user_id,
         name="Amanda Silva",
         email="amanda@example.com",
+        password_hash="hashed_password_123",
     )
 
     db_session.add(user)
@@ -51,12 +54,14 @@ def test_should_reject_duplicate_email(db_session):
         id=uuid4(),
         name="Maria",
         email="same@example.com",
+        password_hash="hashed_password_123",
     )
 
     second_user = UserModel(
         id=uuid4(),
         name="Amanda",
         email="same@example.com",
+        password_hash="hashed_password_123",
     )
 
     db_session.add(first_user)
@@ -66,4 +71,18 @@ def test_should_reject_duplicate_email(db_session):
 
     with pytest.raises(IntegrityError):
         db_session.commit()
-        
+def test_should_persist_password_as_hash(db_session):
+    user = UserModel(
+        id=uuid4(),
+        name="Maria Silva",
+        email="maria@example.com",
+        password_hash="hashed_password_123",
+    )
+
+    db_session.add(user)
+    db_session.commit()
+
+    persisted_user = db_session.get(UserModel, user.id)
+
+    assert persisted_user is not None
+    assert persisted_user.password_hash == "hashed_password_123"

@@ -21,3 +21,7 @@ class UserModel(Base):
         String(255),
         nullable=True,
     )
+    password_hash: Mapped[str] = mapped_column(
+    String(255),
+    nullable=False,
+    )
