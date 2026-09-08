@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/user_service.dart';
+import '../register/register_success_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -63,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return;
   }
 
-  await _userService.createUser(
+  final success = await _userService.createUser(
     name: _nameController.text,
     preferredName: _preferredNameController.text.isEmpty
         ? null
@@ -72,6 +73,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     password: _passwordController.text,
     passwordConfirmation: _passwordConfirmationController.text,
   );
+
+  if (!mounted) {
+    return;
+  }
+
+  if (success) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const RegisterSuccessScreen(),
+      ),
+  );
+  }
 }
 
   @override

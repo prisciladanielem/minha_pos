@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class UserService {
-  Future<void> createUser({
+  Future<bool> createUser({
     required String name,
     String? preferredName,
     required String email,
@@ -24,7 +24,6 @@ class UserService {
       }),
     );
 
-    print(response.statusCode);
-    print(response.body);
+    return response.statusCode == 201;
   }
 }
